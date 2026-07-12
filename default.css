@@ -1,0 +1,74 @@
+body {
+/* background-image: url('https://images-assets.nasa.gov/image/art002e009301/art002e009301~orig.jpg');
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-size: cover;
+background-position: top-right; */
+background-color: #1B1F27;
+}
+button.abs {
+opacity: 0;
+}
+label {
+background-color: azure;
+}
+button.scoreBtn {
+    background-color: rgba(212, 0, 255, 0);
+    border-style: none;
+    
+    display: block; 
+    margin: 0 auto; 
+    top: 1000%;
+
+    text-align: center;
+
+    font-family: "Michroma", sans-serif;
+    font-size: xx-large;
+    color: #E9E8ED;
+}
+button.scoreBtn:hover {
+    text-decoration: underline;
+}
+.inner-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+p {
+    color: #E9E8ED;
+    font-family: "Michroma", sans-serif;
+}
+.score-wrapper {
+        display: none;
+}
+div.scoreInfo {
+    display: none;
+}
+button.scoreInfoBtn {
+    background-color: transparent;
+    border: none;
+    display: inline-block;
+    margin: 0 0 0 8px;
+    vertical-align: middle;
+
+    text-align: center;
+    font-family: "Michroma", sans-serif;
+    font-size: xx-large;
+    color: #e9e8ed7e;
+    cursor: pointer;
+    padding: 0 6px;
+}
+button.scoreInfoBtn:hover {
+    color: #E9E8ED;
+    text-decoration: none;
+}
+
+.score-wrapper .score {
+    display: inline-block;
+    color: #E9E8ED;
+    font-family: "Michroma", sans-serif;
+    font-size: xx-large;
+    margin: 0;
+    vertical-align: middle;
+}
