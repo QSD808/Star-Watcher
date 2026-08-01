@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Load fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
 
+    <!-- Get CSS -->
     <link rel="stylesheet" href="default.css">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Star watcher</title>
+
+    <!-- Get JS and library -->
     <script type="module" src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
 </head>
 <body>
-    
+    <!-- canvas for displaying the stars -->
+    <canvas id="stars"></canvas>
+
+    <!-- Wrapper containing score controls and details -->
     <div class="inner-wrap">
         <button id="scoreBtn" class="scoreBtn">Get score</button>
         <div class="score-wrapper" id="score-wrapper">
@@ -23,10 +31,10 @@
                 <p id="cloudScore"></p>
                 <p id="moonScore"></p>
                 <p id="timeScore"></p>
+                <!-- Graph for future score forecast -->
+                <canvas id="futureGraph" style="width: 100px;height: 75px;display: inline-block;"></canvas>
             </div>
         </div>
     </div>
-
-
 </body>
 </html>

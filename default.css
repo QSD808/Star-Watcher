@@ -1,24 +1,31 @@
+/* Page layout and background styling */
 body {
-/* background-image: url('https://images-assets.nasa.gov/image/art002e009301/art002e009301~orig.jpg');
-background-repeat: no-repeat;
-background-attachment: fixed;
-background-size: cover;
-background-position: top-right; */
-background-color: #1B1F27;
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: #1B1F27;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+/* Invisible button helper, if used elsewhere */
 button.abs {
-opacity: 0;
+    opacity: 0;
 }
+
+/* Default label styling */
 label {
-background-color: azure;
+    background-color: azure;
 }
+
+/* Primary score button styling */
 button.scoreBtn {
     background-color: rgba(212, 0, 255, 0);
     border-style: none;
-    
-    display: block; 
-    margin: 0 auto; 
-    top: 1000%;
+
+    display: block;
+    margin: 0 auto;
+    width: max-content;
 
     text-align: center;
 
@@ -26,25 +33,41 @@ button.scoreBtn {
     font-size: xx-large;
     color: #E9E8ED;
 }
+
 button.scoreBtn:hover {
     text-decoration: underline;
 }
+
+/* Container for score display and info overlay */
 .inner-wrap {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 80vh;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    text-align: center;
 }
+
+/* Shared paragraph styling for score text */
 p {
     color: #E9E8ED;
     font-family: "Michroma", sans-serif;
 }
+
+/* Hide the score wrapper until the user requests a score */
 .score-wrapper {
-        display: none;
+    display: none;
 }
+
+/* Hide the extra score info panel until the user opens it */
 div.scoreInfo {
     display: none;
 }
+
+/* Small info button next to the main score */
 button.scoreInfoBtn {
     background-color: transparent;
     border: none;
@@ -59,11 +82,13 @@ button.scoreInfoBtn {
     cursor: pointer;
     padding: 0 6px;
 }
+
 button.scoreInfoBtn:hover {
     color: #E9E8ED;
     text-decoration: none;
 }
 
+/* Score number text styling */
 .score-wrapper .score {
     display: inline-block;
     color: #E9E8ED;
@@ -71,4 +96,11 @@ button.scoreInfoBtn:hover {
     font-size: xx-large;
     margin: 0;
     vertical-align: middle;
+}
+
+/* Full-screen animated star background canvas */
+canvas#stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
 }
