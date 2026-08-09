@@ -27,12 +27,25 @@
         <div class="score-wrapper" id="score-wrapper">
             <p id="score" class="score"></p>
             <button id="scoreInfoBtn" class="scoreInfoBtn">+</button>
+            <button id="scoreInfoHideBtn" class="scoreInfoHideBtn">-</button>
             <div id="scoreInfo" class="scoreInfo">
-                <p id="cloudScore"></p>
-                <p id="moonScore"></p>
-                <p id="timeScore"></p>
+                <br>
+                <div id="cloudScore" class="tooltip">
+                    <span class="tooltipText">A score based on the current cloudcover. 10/10 means no clouds and 0/10 means the entire sky is covered by clouds.</span>
+                </div>
+                <br>
+                <br>
+                <div id="moonScore" class="tooltip">
+                    <span class="tooltipText">A score based on the current brightness of the moon. 10/10 means no moon brightness(new moon) and 0/10 means the moon is very bright(full moon).</span>
+                </div>
+                <br>
+                <br>
+                <div id="sunScore" class="tooltip">
+                    <span class="tooltipText">A score based on the current brightness of the sun. 10/10 means the sun is at its dimmest (middle of the night) and 0/10 means the sun is at its brightest(around 12:00).</span>
+                </div>
+                <br>
                 <!-- Graph for future score forecast -->
-                <canvas id="futureGraph" style="width: 100px;height: 75px;display: inline-block;"></canvas>
+                <canvas id="futureGraph" class="futureGraph"></canvas>
             </div>
         </div>
     </div>

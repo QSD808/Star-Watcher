@@ -1,7 +1,6 @@
 /* Page layout and background styling */
 body {
     min-height: 100vh;
-    overflow: hidden;
     background-color: #1B1F27;
     display: flex;
     align-items: center;
@@ -44,8 +43,9 @@ button.scoreBtn:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
-    width: 100%;
+    min-height: 90vh;
+    width: min(1000px, 94vw);
+    /* padding: 2.5rem 3rem; */
     position: relative;
     z-index: 1;
     text-align: center;
@@ -60,14 +60,31 @@ p {
 /* Hide the score wrapper until the user requests a score */
 .score-wrapper {
     display: none;
+    width: 100%;
+    align-items: center;
 }
 
 /* Hide the extra score info panel until the user opens it */
-div.scoreInfo {
+.scoreInfo {
     display: none;
+    width: min(75%,90vw);
+    max-width: 100%;
+    /* height: 100%; */
+    margin-top: 8px;
+    margin: auto;
+    max-height: 50vh;
 }
 
-/* Small info button next to the main score */
+/* Make the future graph stay a fixed size */
+.futureGraph {
+    display: block;
+    width: 100%;
+    height: 280px;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+/* Small info button next to the main score to show extra information*/
 button.scoreInfoBtn {
     background-color: transparent;
     border: none;
@@ -88,6 +105,27 @@ button.scoreInfoBtn:hover {
     text-decoration: none;
 }
 
+/* Small info button next to the main score to hide extra score info*/
+button.scoreInfoHideBtn {
+    background-color: transparent;
+    border: none;
+    display: none;
+    margin: 0 0 0 8px;
+    vertical-align: middle;
+
+    text-align: center;
+    font-family: "Michroma", sans-serif;
+    font-size: xx-large;
+    color: #e9e8ed7e;
+    cursor: pointer;
+    padding: 0 6px;
+}
+
+button.scoreInfoHideBtn:hover {
+    color: #E9E8ED;
+    text-decoration: none;
+}
+
 /* Score number text styling */
 .score-wrapper .score {
     display: inline-block;
@@ -103,4 +141,36 @@ canvas#stars {
     position: fixed;
     inset: 0;
     z-index: 0;
+}
+
+/* Tooltips */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  color: #E9E8ED;
+  font-family: "Michroma", sans-serif;
+}
+
+.tooltipText {
+  opacity: 0;
+  transition: opacity 0.5s;
+  width: 300px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 2;
+  top: -100%;
+  left: 135%;
+  margin-left: -60px;
+  font-family: "Michroma", sans-serif;
+  font-size: small;
+  background-color: #E9E8ED;
+  color: #1B1F27;
+}
+
+
+.tooltip:hover .tooltipText {
+  opacity: 1;
 }

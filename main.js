@@ -14,16 +14,21 @@ function showElement(elementId) {
 
 //function that uses the open meteo api to return the cloudcover at this time in percent
 const getClouds = async (lat, long) => {
-  const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=cloud_cover&models=ecmwf_ifs&forecast_days=1`);
+  const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&hourly=cloud_cover&current=is_day&timezone=auto&forecast_days=1`);
   const myJson = await response.json();
   const date1 = new Date();
 
   for (let i = 0; i < myJson.hourly.time.length; i++) {
     const date2 = new Date(myJson.hourly.time[i]);
+    console.log("Date 1: " + date1.toString())
+    console.log("Date 2: " + date2.toString())
+    console.log("difference: " + (date1.getTime() - date2.getTime()))
     if ((date1.getTime() - date2.getTime()) < 3600000 && (date1.getTime() - date2.getTime()) > 0) {
+        console.log(myJson.hourly.cloud_cover[i])
         return myJson.hourly.cloud_cover[i];
     }
   }
+  console.log("PROBLEM")
 }
 
 //function that returns the moon brightness using the Suncalc library
@@ -61,18 +66,21 @@ async function calculateScore() {
   const cloudLevel = await getClouds(pos.coords.latitude, pos.coords.longitude)
   const moonLight = await getMoonLight()
   const times = SunCalc.getTimes(new Date(), pos.coords.latitude , pos.coords.longitude)
+  const sunPos = SunCalc.getPosition((new Date("2026-08-03T00:01:00")), pos.coords.latitude, pos.coords.longitude)
 
   //calculate score
   const cloudScore = 1 - (cloudLevel/100);
-  const moonScore = 1 - (moonLight)
-  let score = cloudScore * moonScore * 10
-
-  return [times, cloudScore - 0.01, moonScore - 0.01, score];
+  const moonScore = 1 - (moonLight);
+  const sunScore = (sunPos.altitude > 0) ? (1 - Math.sin(sunPos.altitude*Math.PI/180)) : (Math.sin(-sunPos.altitude*Math.PI/180) + 1);
+  let score = Math.min(10, sunScore * cloudScore * moonScore * 10);
+  console.error(cloudLevel)
+  
+  return [times, cloudScore, moonScore, sunScore, score];
   }
 
 //displays the score to the user
 async function displayScore() {
-  const [times, cloudScore, moonScore, score] = await calculateScore();
+  const [times, cloudScore, moonScore, sunScore, score] = await calculateScore();
   hideElement("scoreBtn");
   showElement("score-wrapper");
   document.getElementById("score").innerHTML = Math.round(score*10)/10 + "/10";
@@ -80,24 +88,32 @@ async function displayScore() {
 
 //Shows extra information about the score
 async function displayScoreInfo() {
-  const [times, cloudScore, moonScore, score] = await calculateScore();
+  const [times, cloudScore, moonScore, sunScore, score] = await calculateScore();
 
-  //Show extra information
+  //Show extra information and hide buttons
   const element = document.getElementById("scoreInfo");
   element.style.display = 'block';
+  hideElement("scoreInfoBtn");
+  showElement('scoreInfoHideBtn');
 
-  document.getElementById("cloudScore").innerHTML = "Cloudscore: " + Math.round(cloudScore*100)/10 + "/10";
-  document.getElementById("moonScore").innerHTML = "Moonscore: " + Math.round(moonScore*100)/10 + "/10";
 
-  const p = document.getElementById("timeScore");
-  if (times.night === null) {p.innerHTML = "Time: There is no astronomical night at you location today";}
-  else if (times.night.getTime() > (new Date()).getTime()) {p.innerHTML = "Time: Wait for the night at " + times.night.toTimeString();}
-  else {p.innerHTML = "Time: It's night";}
+  document.getElementById("cloudScore").innerHTML = "Cloudscore: " + Math.round(cloudScore*100)/10 + "/10" + document.getElementById("cloudScore").innerHTML;
+  document.getElementById("moonScore").innerHTML = "Moonscore: " + Math.round(moonScore*100)/10 + "/10" + document.getElementById("moonScore").innerHTML;
+  document.getElementById("sunScore").innerHTML = "Sun brightness: " + Math.min(Math.round(sunScore*100-10)/10, 10) + "/10" + document.getElementById("sunScore").innerHTML;
 }
+
+//Function that hides the extra score info
+function hideScoreInfo() {
+  hideElement('scoreInfo');
+  hideElement('scoreInfoHideBtn');
+  showElement('scoreInfoBtn');
+}
+
 
 // Attach click listeners for score display and info expansion.
 document.getElementById('scoreBtn').addEventListener('click', displayScore);
 document.getElementById('scoreInfoBtn').addEventListener('click', displayScoreInfo);
+document.getElementById('scoreInfoHideBtn').addEventListener('click', hideScoreInfo)
 
 
 
@@ -110,6 +126,7 @@ const xValues = [];
 const cloudValues = [];
 const moonValues = [];
 const scoreValues = [];
+const sunValues = [];
 
 const pos = await getPosition(); //Get position for next step
 const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&hourly=cloud_cover&models=ecmwf_ifs&forecast_days=3`) //get the cloud forecast for the next 3 days
@@ -121,17 +138,20 @@ const date1 = new Date();
     const date2 = new Date(myJson.hourly.time[i])
     
     if (date1.getTime() < date2.getTime()) {
-        xValues.push(date2.getDate() + "/" + date2.getMonth() + " " + date2.getHours() + ":00"); //Xvalue label
+        xValues.push(date2.getDate() + "/" + (date2.getMonth()+1) + " " + date2.getHours() + ":00"); //Xvalue label
         cloudValues.push((100 - myJson.hourly.cloud_cover[i])/10); //cloudscore
         const {fraction} = SunCalc.getMoonIllumination(date2); //Moonscore
-        moonValues.push((1-fraction)*10);
-        scoreValues.push((100 - myJson.hourly.cloud_cover[i])/100 * (1-fraction) * 10); //Actual score
+        moonValues.push((1-fraction)*10); //Moonscore
+        const sunPos = SunCalc.getPosition(date2, pos.coords.latitude, pos.coords.longitude); //Sunscore
+        const sunScore = (sunPos.altitude > 0) ? (1 - Math.sin(sunPos.altitude*Math.PI/180)) : (Math.sin(-sunPos.altitude*Math.PI/180) + 1);
+        sunValues.push(Math.min(sunScore*9-1, 10)); //sunscore
+        scoreValues.push(Math.min((100 - myJson.hourly.cloud_cover[i])/100 * (1-fraction) * 10 * sunScore, 10)); //Actual score
     }
   }
 
 
 //Draw graph using chart.JS
-const graphCtx = document.getElementById('futureGraph');
+const graphCtx = document.getElementById('futureGraph').getContext('2d');
 
 new Chart(graphCtx, {
   type: "line",
@@ -153,6 +173,14 @@ new Chart(graphCtx, {
       tension: 0.4,
       hidden: true
   },
+  {
+      label: 'Future sun brightness score',
+      data: sunValues,
+      borderColor:  "#ece3b3",
+      pointRadius: 2,
+      tension: 0.4,
+      hidden: true
+  },
   { 
       label: 'Future score',
       data: scoreValues,
@@ -162,13 +190,15 @@ new Chart(graphCtx, {
     },]
   },
   options: {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { 
         display: true,
         // labels: {}
        },
       title: {
-        display: true,
+        display: false,
         text: "Future scores",
         font: {size: 16}}
     },
