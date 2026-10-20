@@ -14,40 +14,111 @@
     <title>Star watcher</title>
 
     <!-- Get JS and library -->
+    <script src="astronomy.browser.js"></script>
     <script type="module" src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
+
+    <!-- Get favicon -->
+    <link rel="icon" type="image/png" href="/planets.png">
 </head>
 <body>
     <!-- canvas for displaying the stars -->
     <canvas id="stars"></canvas>
 
     <!-- Wrapper containing score controls and details -->
+
     <div class="inner-wrap">
-        <button id="scoreBtn" class="scoreBtn">Get score</button>
-        <div class="score-wrapper" id="score-wrapper">
-            <p id="score" class="score"></p>
-            <button id="scoreInfoBtn" class="scoreInfoBtn">+</button>
-            <button id="scoreInfoHideBtn" class="scoreInfoHideBtn">-</button>
-            <div id="scoreInfo" class="scoreInfo">
-                <br>
-                <div id="cloudScore" class="tooltip">
-                    <span class="tooltipText">A score based on the current cloudcover. 10/10 means no clouds and 0/10 means the entire sky is covered by clouds.</span>
+        <button id="scoreBtn" class="scoreBtn">Start looking</button>
+        <p id="pitch" style="color: grey; align-self: center;">Is tonight a good night for stargazing? Press above to find out!</p>
+        <div id="refreshDiv" class="refreshDiv">
+            <label for="useCurLoc" style="color: rgb(177, 177, 177); font-size: medium; background: none;">Use current location </label>
+            <input type="checkbox" id="useCurLoc" checked>
+            <label for="latInp" style="color: rgb(177, 177, 177); font-size: medium; background: none;">Latitude: </label>
+            <input type="text" class="coordInp" id="latInp" placeholder="50S° -> -50, 50N° -> 50">
+            <label for="lonInp" style="color: rgb(177, 177, 177); font-size: medium; background: none;">Longitude: </label>
+            <input type="text" class="coordInp" id="lonInp" placeholder="74W° -> -74, 74E° -> 74">
+            <button id="refreshBtn" class="refreshBtn">refresh</button>
+        </div>
+
+        <div id="row-wrapper" class="row-wrapper">
+            <div class="score-wrapper" id="score-wrapper">
+                <label for="score" style="color: rgb(177, 177, 177); font-size: medium; background: none;">Current stargazing score: </label>
+                <h2 id="score" class="score"></h2>
+                <button id="scoreInfoBtn" class="maxBtn">+</button>
+                <button id="scoreInfoHideBtn" class="minBtn">-</button>
+                <div id="scoreInfo" class="scoreInfo">
+                    <br>
+                    <p id="cloudScore" class="specificScore"></p>
+                    <p id="moonScore" class="specificScore">
+                    </p>
+                    <p id="sunScore" class="specificScore">
+                    </p>
+                    <br>
+                    <!-- Graph for future score forecast -->
+                    <div style="position: relative; width: 100%; height: 300px;">
+                        <canvas id="futureGraph" class="futureGraph"></canvas>
+                    </div>
                 </div>
-                <br>
-                <br>
-                <div id="moonScore" class="tooltip">
-                    <span class="tooltipText">A score based on the current brightness of the moon. 10/10 means no moon brightness(new moon) and 0/10 means the moon is very bright(full moon).</span>
+            </div>
+
+            <div id="planetWrapper" class="planetWrapper">
+                <div style="display: flex;">
+                    <h2 style="color:white;">Planets</h2>
+                    <button class="maxBtn" id="maxPlanetBtn">+</button>
+                    <button class="minBtn" id="minPlanetBtn">-</button>
                 </div>
-                <br>
-                <br>
-                <div id="sunScore" class="tooltip">
-                    <span class="tooltipText">A score based on the current brightness of the sun. 10/10 means the sun is at its dimmest (middle of the night) and 0/10 means the sun is at its brightest(around 12:00).</span>
+                <div id="planets" class="planets">
+                <div id="planetList">
+                    <div id="planetBtns"></div>
+                    <p id="planetInfoText">Press on a planet to get info</p>
+                </div></div>
+                    
+                <div style="display: flex;">
+                    <h2 style="color:white;">Constellations</h2>
+                    <button class="maxBtn" id="maxConstBtn">+</button>
+                    <button class="minBtn" id="minConstBtn">-</button>
                 </div>
-                <br>
-                <!-- Graph for future score forecast -->
-                <canvas id="futureGraph" class="futureGraph"></canvas>
+                <div id="constellations" class="constellations">
+                <div class="constFilters">
+                    <div>
+                        <input type="checkbox" id="onlyShowVis">
+                        <label for="onlyShowVis" class="CheckLabel">Only show visible</label>
+                    </div>
+                    <input type="text" class="searchConst" id="searchConst" placeholder="Search constellations">
+                </div>
+                <div id="constList" class="constList"></div>
+                <div id="constInfo" class="constInfo">
+                    <p id="constInfoText">Press on a constellation to get info</p>
+                </div></div>
+                
+                <div style="display: flex;">
+                    <h2 style="color:white;">Compass</h2>
+                    <button class="maxBtn" id="maxCompassBtn">+</button>
+                    <button class="minBtn" id="minCompassBtn">-</button>
+                </div>
+                <div id="compass" class="compassDiv">
+                    <button id="compassBtn" class="compassBtn">Press to enable compass<br><br></button>
+                    <p id="compassError">Lorem ipsum dolor</p>
+                    <svg class="compass" id="compassSVGWrap">
+                        <g id="compassSVG"></g>
+                </svg></div>
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+    <div class="credits">
+        <p style="font-size: medium; background: none;">
+            Credits: <br>
+            <span style="font-size: small; color: rgb(177, 177, 177); ">
+            <a href="https://open-meteo.com/" style="font-size: small; color: rgb(177, 177, 177);">Open Meteo API</a> <br>
+            <a href="https://github.com/cosinekitty/astronomy" style="font-size: small; color: rgb(177, 177, 177);">Astronomy Engine by cosine kitty</a> <br>
+            <a href="https://github.com/mourner/suncalc" style="font-size: small; color: rgb(177, 177, 177);">Suncalc by mourner</a> <br>
+            <a href="https://www.chartjs.org/" style="font-size: small; color: rgb(177, 177, 177);">Chart.JS</a> <br>
+            <a href="https://www.flaticon.com/free-icon/planets_1789881?term=planet&page=1&position=29&origin=tag&related_id=1789881" style="font-size: small; color: rgb(177, 177, 177);">Flaticon</a>
+        </p>   
+    </div>
+    </footer>
+
 </body>
 </html>
