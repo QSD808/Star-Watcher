@@ -28,9 +28,7 @@ function expandElement(elementId) {
 //function that uses the open meteo api to return the cloudcover at this time in percent
 let cloudCover;
 const getClouds = async (lat, long, needRefresh) => {
-  console.log('call')
   if (cloudCover && !needRefresh) {return cloudCover;}
-  console.log('fetch');
   let response;
   try {
     response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=cloud_cover`);
@@ -767,7 +765,6 @@ function hideLabel () {
 
 let center;
 let compassRad;
-console.log('TEST')
 
 //function used to calculate XY coordinates for in the compass
 function polarToXY(azDeg, r) {
