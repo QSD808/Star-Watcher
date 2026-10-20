@@ -652,6 +652,7 @@ async function refresh() {
 }
 
 document.getElementById('refreshBtn').addEventListener('click', refresh)
+setInterval(refresh, 60000); //refreshes every 60s
 //------------------------------------------------------------------------------------------------------------
 //Compass
 //------------------------------------------------------------------------------------------------------------
