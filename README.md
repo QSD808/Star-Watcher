@@ -1,6 +1,5 @@
 # Star-Watcher
-A website that tells you how good you can look at the stars tonight.
-
+A website that gives you a score for stargazing at any location and shows what planets and constellation you can see.
 
 <h3>Try it: </h3>
 <a href="https://qsd808.github.io/Star-Watcher/">Press here to try it</a>
