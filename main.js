@@ -636,7 +636,7 @@ document.getElementById('maxConstBtn').addEventListener('click', showConst);
 //------------------------------------------------------------------------------------------------------------
 async function refresh() {
   position = await getPosition("refresh"); //refresh user position
-  getClouds(position.coords.latitude, position.coords.longitude, true); //get new cloud cover
+  await getClouds(position.coords.latitude, position.coords.longitude, true); //get new cloud cover
   //refresh score
   displayScoreInfo();
   displayScore();
