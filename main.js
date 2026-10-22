@@ -103,7 +103,7 @@ async function calculateScore() {
 
   //calculate score
   const cloudScore = 1 - (cloudLevel/100);
-  const moonScore = 1 - moonLight * Math.max(0, Math.sin((SunCalc.getMoonPosition(new Date(), pos.coords.latitude , pos.coords.longitude).altitude))*Math.PI/180);
+  const moonScore = 1 - moonLight * Math.max(0, Math.sin((SunCalc.getMoonPosition(new Date(), pos.coords.latitude , pos.coords.longitude).altitude)*Math.PI/180));
   const sunScore =  Math.min(1, Math.max(0, -sunPos.altitude / 18));
   let score = Math.min(10, sunScore * cloudScore * moonScore * 10);
   
