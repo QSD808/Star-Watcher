@@ -1,5 +1,5 @@
 # Star-Watcher
-A website that gives you a score for stargazing at any location and shows what planets and constellation you can see.
+A website that gives you a score for stargazing at any location and shows what planets and constellations you can see.
 
 ![example GIF](./ezgif-speed.gif)
 
