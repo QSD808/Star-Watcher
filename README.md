@@ -22,5 +22,5 @@ For all score related needs, I used the Suncalc libary and the Open-meteo API. F
 - <a href="https://github.com/mourner/suncalc" style="font-size: small; color: rgb(177, 177, 177);">Suncalc by mourner</a> used for sun and moon score calculations<br>
 - <a href="https://www.chartjs.org/" style="font-size: small; color: rgb(177, 177, 177);">Chart.JS</a> used for the graph<br>
 - <a href="https://www.flaticon.com/free-icon/planets_1789881?term=planet&page=1&position=29&origin=tag&related_id=1789881" style="font-size: small; color: rgb(177, 177, 177);">Flaticon</a> used for the favicon <br>
-- <a href="https://claude.ai" style="font-size: small; color: rgb(177, 177, 177);">Flaticon</a> used to create planet icons <br>
+- <a href="https://claude.ai" style="font-size: small; color: rgb(177, 177, 177);">Claude</a> used to create planet icons <br>
 - <a href="https://stardance.hackclub.com" style="font-size: small; color: rgb(177, 177, 177);">Stardance</a> used their recources for learning how to ship (this project was also made for Stardance)<br>
