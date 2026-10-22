@@ -91,7 +91,7 @@ function getPosition() {
 }
 
 let position;
-
+let refreshInterval = null;
 //function that calculates the score for stargazing
 async function calculateScore() {
   //define variables
@@ -130,7 +130,7 @@ async function displayScoreInfo() {
 
   document.getElementById("cloudScore").innerHTML = `Cloudscore: ${Math.min(Math.max(0, Math.round(cloudScore*100)/10), 10)}/10 <span class="specificScoreTxt" style="color: grey;font-size:small;">A score based on the current cloudcover. 10/10 means no clouds and 0/10 means the entire sky is covered by clouds.</span>`;
   document.getElementById("moonScore").innerHTML = `Moonscore: ${Math.min(Math.max(0, Math.round(moonScore*100)/10), 10)}/10 <span class="specificScoreTxt" style="color: grey;font-size:small;">A score based on the current brightness of the moon. 10/10 means no moon brightness(new moon) and 0/10 means the moon is very bright(full moon).</span>`;
-  document.getElementById("sunScore").innerHTML = `Sunscore: ${Math.min(Math.max(0, Math.round(sunScore*90-10)/10), 10)}/10 <span class="specificScoreTxt" style="color: grey;font-size:small;">A score based on the current brightness of the sun. 10/10 means the sun is at its dimmest (middle of the night) and 0/10 means the sun is at its brightest(around 12:00).</span>`;
+  document.getElementById("sunScore").innerHTML = `Sunscore: ${Math.min(Math.max(0, Math.round(sunScore*100)/10), 10)}/10 <span class="specificScoreTxt" style="color: grey;font-size:small;">A score based on the current brightness of the sun. 10/10 means the sun is at its dimmest (middle of the night) and 0/10 means the sun is at its brightest(around 12:00).</span>`;
   expandElement('scoreInfo');
 }
 
@@ -152,8 +152,8 @@ async function showAll () {
   updateConstList(); //show list with consts
   showPlanetList(); //show list whith palents
 
-  displayScore (); //display the score
-  showElement('planetWrapper');//shows planetwrapper
+  await displayScore (); //display the score
+  await showElement('planetWrapper');//shows planetwrapper
   //expand everything else the user needs to see whith a slick animation
   drawCompass();
   drawGraph(false);
@@ -161,7 +161,9 @@ async function showAll () {
   expandElement('constellations');
   expandElement('planets');
   showElement('refreshDiv');
-}
+  if (refreshInterval === null) { //refresh every minute
+  refreshInterval = setInterval(refresh, 60000);
+  }}
 
 // Attach click listeners for score display and info expansion.
 document.getElementById('scoreBtn').addEventListener('click', showAll);
@@ -638,10 +640,10 @@ async function refresh() {
   position = await getPosition("refresh"); //refresh user position
   await getClouds(position.coords.latitude, position.coords.longitude, true); //get new cloud cover
   //refresh score
-  displayScoreInfo();
-  displayScore();
+  await displayScoreInfo();
+  await displayScore();
   //refresh graph
-  drawGraph(true);
+  await drawGraph(true);
   //refresh time and place
   observer = new Astronomy.Observer(position.coords.latitude, position.coords.longitude, 0);
   time = new Astronomy.AstroTime(new Date());
@@ -652,7 +654,6 @@ async function refresh() {
 }
 
 document.getElementById('refreshBtn').addEventListener('click', refresh)
-setInterval(refresh, 60000); //refreshes every 60s
 //------------------------------------------------------------------------------------------------------------
 //Compass
 //------------------------------------------------------------------------------------------------------------
@@ -733,7 +734,7 @@ document.getElementById('maxCompassBtn').addEventListener('click', showCompass);
 //add buttons for planets on compass
 document.getElementById("compassSVG").addEventListener('click', (e) => {
 const b = e.target.dataset.body;
-if (b) highlight(b); showPlanetInfo(b);
+if (b) highlight(b); if (b) showPlanetInfo(b);
 });
 
 let highlighted;
