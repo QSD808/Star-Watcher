@@ -16,6 +16,11 @@ A website that gives you a score for stargazing at any location and shows what p
 <h3>How it works</h3>
 For all score related needs, I used the Suncalc libary and the Open-meteo API. For all planet and constallation related needs, I used the Astronomy engine library. This is my first ever coding project, so the code is a bit messy and unoptimized in some places. I did try to add comments where they were needed.
 
+<h3>How to run locally</h3>
+1.Download or clone this repo.
+2.Open the project folder.
+3.Open index.html in your browser.
+
 <h3>Credits</h3>
 - <a href="https://open-meteo.com/" style="font-size: small; color: rgb(177, 177, 177);">Open Meteo API</a> used to get cloud cover data<br>
 - <a href="https://github.com/cosinekitty/astronomy" style="font-size: small; color: rgb(177, 177, 177);">Astronomy Engine by cosine kitty</a> used for astronomy calculations<br>
