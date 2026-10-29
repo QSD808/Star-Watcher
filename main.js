@@ -165,7 +165,7 @@ async function showAll () {
   if (refreshInterval === null) { //refresh every minute
   refreshInterval = setInterval(refresh, 60000);
   }}
-}
+
 
 // Attach click listeners for score display and info expansion.
 document.getElementById('scoreBtn').addEventListener('click', showAll);
